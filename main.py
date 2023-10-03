@@ -1,8 +1,18 @@
 import tkinter as tk
-
+import pandas as pd
+import encryption
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+def add_password():
+    cur_website=website_entry.get
+    cur_user=user_name_entry.get()
+    cur_password=password_entry.get()
+    if cur_website and cur_user and cur_password:
+        password={'user_name':cur_user,'password':cur_password}
+        encryption.encrypt_data(website=cur_website,new_password=password)
+    else:
+        print("you didnt enter all the information for password")
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -25,6 +35,7 @@ password_label.grid(row=4, column=0, sticky="w")
 
 # entrys
 website_entry = tk.Entry(width=50)
+website_entry.focus()
 website_entry.grid(row=2, column=1, columnspan=2)
 user_name_entry = tk.Entry(width=50)
 user_name_entry.grid(row=3, column=1, columnspan=2)
@@ -34,7 +45,7 @@ password_entry.grid(row=4, column=1, sticky="w", pady=5)
 # buttons
 generate_button = tk.Button(text="Generate password", width=19)
 generate_button.grid(row=4, column=1, columnspan=2, sticky="e", pady=5)
-add_button = tk.Button(text="add", width=28)
+add_button = tk.Button(text="add", width=28,command=add_password)
 add_button.grid(row=5, column=1)
 
 window.mainloop()
