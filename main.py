@@ -2,6 +2,7 @@ import tkinter as tk
 import pandas as pd
 import encryption
 from tkinter import scrolledtext
+from tkinter import messagebox
 import json
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -10,11 +11,15 @@ def add_password():
     cur_website=website_entry.get()
     cur_user=user_name_entry.get()
     cur_password=password_entry.get()
-    if cur_website and cur_user and cur_password:
+    cur_main_password=main_password_entry.get()
+    if cur_website and cur_user and cur_password and cur_main_password:
         password={'user_name':cur_user,'password':cur_password}
-        encryption.encrypt_data(website=cur_website,new_password=password)
+        if not encryption.encrypt_data(main_pass=cur_main_password, website=cur_website,new_password=password):
+            messagebox.showinfo("Error", "something went wrong with the encryption")
+        messagebox.showinfo("Success", "password as added succesfully")
     else:
-        print("you didnt enter all the information for password")
+        messagebox.showinfo("Information", "you didnt enter all info")
+        
 
 def format_data_for_display(data):
     formatted_text = ""
@@ -26,10 +31,18 @@ def format_data_for_display(data):
     return formatted_text
 
 def show_passwords():
+    cur_main_password=main_password_entry.get()
+    if not cur_main_password:
+        messagebox.showinfo("Information", "please enter myPass password.")
+        return
     passwrods_window = tk.Toplevel()
     passwrods_window.title("All passwords")
     text_widget = scrolledtext.ScrolledText(passwrods_window, wrap=tk.WORD)
-    passwords_as_json=json.loads(encryption.decrypt_data().replace("'","\""))
+    decrypted_data=encryption.decrypt_data(cur_main_password)
+    if decrypted_data==None:
+        messagebox.showinfo("Error", "something went wrong with the decryption")
+        return
+    passwords_as_json=json.loads(decrypted_data.replace("'","\""))
     formated_data=format_data_for_display(passwords_as_json)
     text_widget.insert(tk.END,formated_data)
     text_widget.pack(expand=True, fill="both")
@@ -47,6 +60,8 @@ canvas.create_image(100, 100, image=lock_img)
 canvas.grid(row=1, column=1)
 
 # labels
+main_password_label = tk.Label(text="myPass password: ", anchor="w", pady=5)
+main_password_label.grid(row=0, column=0, sticky="w",columnspan=2)
 wbsite_label = tk.Label(text="Website URL: ", anchor="w", pady=5)
 wbsite_label.grid(row=2, column=0, sticky="w")
 user_name_label = tk.Label(text="User name: ", anchor="w", pady=5)
@@ -55,8 +70,10 @@ password_label = tk.Label(text="Password: ", anchor="w", pady=5)
 password_label.grid(row=4, column=0, sticky="w")
 
 # entrys
+main_password_entry = tk.Entry(width=20)
+main_password_entry.grid(row=0, column=1)
+main_password_entry.focus()
 website_entry = tk.Entry(width=50)
-website_entry.focus()
 website_entry.grid(row=2, column=1, columnspan=2)
 user_name_entry = tk.Entry(width=50)
 user_name_entry.grid(row=3, column=1, columnspan=2)
