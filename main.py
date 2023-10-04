@@ -5,7 +5,7 @@ import encryption
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add_password():
-    cur_website=website_entry.get
+    cur_website=website_entry.get()
     cur_user=user_name_entry.get()
     cur_password=password_entry.get()
     if cur_website and cur_user and cur_password:
@@ -13,6 +13,13 @@ def add_password():
         encryption.encrypt_data(website=cur_website,new_password=password)
     else:
         print("you didnt enter all the information for password")
+
+def show_passwords():
+    cur_website=website_entry.get()
+    if cur_website:
+        print(encryption.decrypt_data())
+    else:
+        print("you didnt enter the website name")
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -45,7 +52,9 @@ password_entry.grid(row=4, column=1, sticky="w", pady=5)
 # buttons
 generate_button = tk.Button(text="Generate password", width=19)
 generate_button.grid(row=4, column=1, columnspan=2, sticky="e", pady=5)
-add_button = tk.Button(text="add", width=28,command=add_password)
-add_button.grid(row=5, column=1)
+add_button = tk.Button(text="add", width=21,command=add_password)
+add_button.grid(row=5, column=1,sticky="w")
+show_button = tk.Button(text="show", width=19,command=show_passwords)
+show_button.grid(row=5, column=1,columnspan=2,sticky="e")
 
 window.mainloop()
