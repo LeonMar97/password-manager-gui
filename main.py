@@ -21,7 +21,8 @@ def add_password():
             main_pass=cur_main_password, website=cur_website, new_password=password
         ):
             messagebox.showinfo("Error", "something went wrong with the encryption")
-        messagebox.showinfo("Success", "password as added succesfully")
+        else:
+            messagebox.showinfo("Success", "password as added succesfully")
     else:
         messagebox.showinfo("Information", "you didnt enter all info")
 
@@ -49,17 +50,19 @@ def show_passwords():
     if not cur_main_password:
         messagebox.showinfo("Information", "please enter myPass password.")
         return
-    passwrods_window = tk.Toplevel()
-    passwrods_window.title("All passwords")
-    text_widget = scrolledtext.ScrolledText(passwrods_window, wrap=tk.WORD)
+    
     decrypted_data = encryption.decrypt_data(cur_main_password)
     if decrypted_data == None:
         messagebox.showinfo("Error", "something went wrong with the decryption")
         return
-    passwords_as_json = json.loads(decrypted_data.replace("'", '"'))
-    formated_data = format_data_for_display(passwords_as_json)
-    text_widget.insert(tk.END, formated_data)
-    text_widget.pack(expand=True, fill="both")
+    else:
+        passwrods_window = tk.Toplevel()
+        passwrods_window.title("All passwords")
+        text_widget = scrolledtext.ScrolledText(passwrods_window, wrap=tk.WORD)
+        passwords_as_json = json.loads(decrypted_data.replace("'", '"'))
+        formated_data = format_data_for_display(passwords_as_json)
+        text_widget.insert(tk.END, formated_data)
+        text_widget.pack(expand=True, fill="both")
 
 
 # ---------------------------- UI SETUP ------------------------------- #

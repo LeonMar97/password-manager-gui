@@ -48,7 +48,7 @@ def get_data():
     with open(file="passwords/encrypted-passwords.txt", mode="rb") as data:
         d = data.read()
         if not d:
-            None
+            return None
         else:
             return d
 
@@ -65,10 +65,15 @@ def set_data(enrypted_data):
 def encrypt_data(main_pass, website, new_password):
     """encrypt website and new password as json encrypted bytes"""
     key = get_key(main_pass)
-    data = json.loads((decrypt_data(key=main_pass).replace("'", '"')))
+    decrypted_d=decrypt_data(key=main_pass)
+    if not decrypted_d :
+        return False
+    data = json.loads((decrypted_d.replace("'", '"')))
+    
     data[website] = new_password
     data_to_encrypt = str(data).encode("utf-8")
     encrypted_data = key.encrypt(data_to_encrypt)
+    
     try:
         set_data(encrypted_data)
     except:
