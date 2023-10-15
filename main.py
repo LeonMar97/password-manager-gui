@@ -4,9 +4,15 @@ import encryption
 from tkinter import scrolledtext
 from tkinter import messagebox
 import json
+import pyperclip as pc
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
-
+def genrate_secure_password():
+    '''genrate secure password, past in entry and copies it to clipboard'''
+    password_entry.delete(0,tk.END)
+    pw=encryption.password_generator()
+    password_entry.insert(tk.END,pw)
+    pc.copy(pw)
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add_password():
@@ -20,12 +26,21 @@ def add_password():
         if not encryption.encrypt_data(
             main_pass=cur_main_password, website=cur_website, new_password=password
         ):
-            messagebox.showinfo("Error", "something went wrong with the encryption")
+            messagebox.showerror("Error", "something went wrong with the encryption")
         else:
             messagebox.showinfo("Success", "password as added succesfully")
     else:
-        messagebox.showinfo("Information", "you didnt enter all info")
+        messagebox.showerror("Information", "you didnt enter all info")
 
+def check_first_time():
+    '''checks if its first time adding password to txt file, to print out warning message'''
+    with open(file="passwords/encrypted-passwords.txt", mode="rb") as f:
+        if not f.read():
+            messagebox.showwarning("info", "hello and welcome to whatPassword , \
+please create first password at top. this is the only password you will need to remmember :) \
+but you cant recover it, DONT FORGET IT !")
+            global check_first_flag
+            check_first_flag=True
 
 def format_data_for_display(data):
     """reforamts json to string
@@ -48,12 +63,12 @@ def show_passwords():
     """prints passwords to another window"""
     cur_main_password = main_password_entry.get()
     if not cur_main_password:
-        messagebox.showinfo("Information", "please enter myPass password.")
+        messagebox.showerror("Information", "please enter whatPassword  password.")
         return
     
     decrypted_data = encryption.decrypt_data(cur_main_password)
     if decrypted_data == None:
-        messagebox.showinfo("Error", "something went wrong with the decryption")
+        messagebox.showerror("Error", "whatPassword  password is incorrect")
         return
     else:
         passwrods_window = tk.Toplevel()
@@ -66,8 +81,9 @@ def show_passwords():
 
 
 # ---------------------------- UI SETUP ------------------------------- #
-
+check_first_flag=False
 window = tk.Tk()
+
 window.title("Password Manager")
 
 window.config(padx=20, pady=20)
@@ -77,7 +93,7 @@ canvas.create_image(100, 100, image=lock_img)
 canvas.grid(row=1, column=1)
 
 # labels
-main_password_label = tk.Label(text="myPass password: ", anchor="w", pady=5)
+main_password_label = tk.Label(text="whatPassword  password: ", anchor="w", pady=5)
 main_password_label.grid(row=0, column=0, sticky="w", columnspan=2)
 wbsite_label = tk.Label(text="Website URL: ", anchor="w", pady=5)
 wbsite_label.grid(row=2, column=0, sticky="w")
@@ -89,7 +105,7 @@ password_label.grid(row=4, column=0, sticky="w")
 # entrys
 main_password_entry = tk.Entry(width=20)
 main_password_entry.grid(row=0, column=1)
-main_password_entry.focus()
+# main_password_entry.focus()
 website_entry = tk.Entry(width=50)
 website_entry.grid(row=2, column=1, columnspan=2)
 user_name_entry = tk.Entry(width=50)
@@ -98,12 +114,14 @@ password_entry = tk.Entry(width=25)
 password_entry.grid(row=4, column=1, sticky="w", pady=5)
 
 # buttons
-generate_button = tk.Button(text="Generate password", width=19)
+generate_button = tk.Button(text="Generate password", width=19,command=genrate_secure_password)
 generate_button.grid(row=4, column=1, columnspan=2, sticky="e", pady=5)
 add_button = tk.Button(text="add", width=21, command=add_password)
 add_button.grid(row=5, column=1, sticky="w")
 show_button = tk.Button(text="show", width=19, command=show_passwords)
 show_button.grid(row=5, column=1, columnspan=2, sticky="e")
-
-
+main_password_entry.focus()
+if not check_first_flag:
+    check_first_time()
+    main_password_entry.focus_force()
 window.mainloop()
