@@ -5,6 +5,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 import base64
+from password_generator import PasswordGenerator
 
 # you can change the salt here for more security, but use the same one each time to retrieve the data
 SALT = b"some_random_salt"
@@ -99,3 +100,8 @@ def decrypt_data(key):
         except:
             return None
     return data
+
+def password_generator():
+    '''genrate secure password'''
+    password=PasswordGenerator().non_duplicate_password(20)
+    return password
