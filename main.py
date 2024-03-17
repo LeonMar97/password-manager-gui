@@ -5,7 +5,6 @@ from tkinter import scrolledtext
 from tkinter import messagebox
 import json
 import pyperclip as pc
-
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def genrate_secure_password():
     '''genrate secure password, past in entry and copies it to clipboard'''
@@ -34,13 +33,19 @@ def add_password():
 
 def check_first_time():
     '''checks if its first time adding password to txt file, to print out warning message'''
-    with open(file="passwords/encrypted-passwords.txt", mode="rb") as f:
-        if not f.read():
-            messagebox.showwarning("info", "hello and welcome to whatPassword , \
+    try:
+        with open(file="passwords/encrypted-passwords.txt", mode="rb") as f:
+            if not f.read():
+                messagebox.showwarning("info", "hello and welcome to whatPassword ,\
 please create first password at top. this is the only password you will need to remmember :) \
 but you cant recover it, DONT FORGET IT !")
-            global check_first_flag
-            check_first_flag=True
+                global check_first_flag
+                check_first_flag=True
+    except OSError as e:
+        messagebox.showerror("error !!!","file 'passwords/encrypted-passwords.txt',\
+not found, please make sure there is a 'passwords' folder with 'encrypted-passwords.txt'\
+ in it" )
+        exit()
 
 def format_data_for_display(data):
     """reforamts json to string
