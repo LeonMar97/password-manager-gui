@@ -1,4 +1,4 @@
 install:poetry.lock pyproject.toml
-	@pip install poetry && poetry install
+	poetry install
 run:
-	@poetry run python main.py
+	poetry run python main.py
