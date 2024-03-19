@@ -12,7 +12,8 @@ SALT = b"some_random_salt"
 
 
 def generate_key(password):
-    """gerate kdf 32byts kkey matiriall for generatin encryption key later-on from users main password, using sha256 algo
+    """gerate kdf 32byts kkey matiriall for generatin encryption key later-on from users main password,
+    using sha256 algo
     Parameter:
     password= my pass paswords for gui
 
@@ -66,18 +67,18 @@ def set_data(enrypted_data):
 def encrypt_data(main_pass, website, new_password):
     """encrypt website and new password as json encrypted bytes"""
     key = get_key(main_pass)
-    decrypted_d=decrypt_data(key=main_pass)
-    if not decrypted_d :
+    decrypted_d = decrypt_data(key=main_pass)
+    if not decrypted_d:
         return False
     data = json.loads((decrypted_d.replace("'", '"')))
-    
+
     data[website] = new_password
     data_to_encrypt = str(data).encode("utf-8")
     encrypted_data = key.encrypt(data_to_encrypt)
-    
+
     try:
         set_data(encrypted_data)
-    except:
+    except:  # noqa: E722
         return False
     return True
 
@@ -97,11 +98,13 @@ def decrypt_data(key):
     else:
         try:
             data = get_key(key).decrypt(data).decode("utf-8")
-        except:
+        except:  # noqa: E722
             return None
+
     return data
 
+
 def password_generator():
-    '''genrate secure password'''
-    password=PasswordGenerator().non_duplicate_password(20)
+    """genrate secure password"""
+    password = PasswordGenerator().non_duplicate_password(20)
     return password

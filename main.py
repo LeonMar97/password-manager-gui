@@ -1,17 +1,19 @@
 import tkinter as tk
-import pandas as pd
 import encryption
 from tkinter import scrolledtext
 from tkinter import messagebox
 import json
 import pyperclip as pc
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def genrate_secure_password():
-    '''genrate secure password, past in entry and copies it to clipboard'''
-    password_entry.delete(0,tk.END)
-    pw=encryption.password_generator()
-    password_entry.insert(tk.END,pw)
+    """genrate secure password, past in entry and copies it to clipboard"""
+    password_entry.delete(0, tk.END)
+    pw = encryption.password_generator()
+    password_entry.insert(tk.END, pw)
     pc.copy(pw)
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add_password():
@@ -22,30 +24,36 @@ def add_password():
     cur_main_password = main_password_entry.get()
     if cur_website and cur_user and cur_password and cur_main_password:
         password = {"user_name": cur_user, "password": cur_password}
-        if not encryption.encrypt_data(
-            main_pass=cur_main_password, website=cur_website, new_password=password
-        ):
+        if not encryption.encrypt_data(main_pass=cur_main_password, website=cur_website, new_password=password):
             messagebox.showerror("Error", "something went wrong with the encryption")
         else:
             messagebox.showinfo("Success", "password as added succesfully")
     else:
         messagebox.showerror("Information", "you didnt enter all info")
 
+
 def check_first_time():
-    '''checks if its first time adding password to txt file, to print out warning message'''
+    """checks if its first time adding password to txt file, to print out warning message"""
     try:
         with open(file="passwords/encrypted-passwords.txt", mode="rb") as f:
             if not f.read():
-                messagebox.showwarning("info", "hello and welcome to whatPassword ,\
+                messagebox.showwarning(
+                    "info",
+                    "hello and welcome to whatPassword ,\
 please create first password at top. this is the only password you will need to remmember :) \
-but you cant recover it, DONT FORGET IT !")
+but you cant recover it, DONT FORGET IT !",
+                )
                 global check_first_flag
-                check_first_flag=True
-    except OSError as e:
-        messagebox.showerror("error !!!","file 'passwords/encrypted-passwords.txt',\
+                check_first_flag = True
+    except OSError:
+        messagebox.showerror(
+            "error !!!",
+            "file 'passwords/encrypted-passwords.txt',\
 not found, please make sure there is a 'passwords' folder with 'encrypted-passwords.txt'\
- in it" )
+ in it",
+        )
         exit()
+
 
 def format_data_for_display(data):
     """reforamts json to string
@@ -70,9 +78,9 @@ def show_passwords():
     if not cur_main_password:
         messagebox.showerror("Information", "please enter whatPassword  password.")
         return
-    
+
     decrypted_data = encryption.decrypt_data(cur_main_password)
-    if decrypted_data == None:
+    if decrypted_data is None:
         messagebox.showerror("Error", "whatPassword  password is incorrect")
         return
     else:
@@ -86,7 +94,7 @@ def show_passwords():
 
 
 # ---------------------------- UI SETUP ------------------------------- #
-check_first_flag=False
+check_first_flag = False
 window = tk.Tk()
 
 window.title("Password Manager")
@@ -119,7 +127,7 @@ password_entry = tk.Entry(width=25)
 password_entry.grid(row=4, column=1, sticky="w", pady=5)
 
 # buttons
-generate_button = tk.Button(text="Generate password", width=19,command=genrate_secure_password)
+generate_button = tk.Button(text="Generate password", width=19, command=genrate_secure_password)
 generate_button.grid(row=4, column=1, columnspan=2, sticky="e", pady=5)
 add_button = tk.Button(text="add", width=21, command=add_password)
 add_button.grid(row=5, column=1, sticky="w")
