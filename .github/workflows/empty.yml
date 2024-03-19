@@ -1,8 +1,0 @@
-name: workflow starter
-
-on: [push]
-
-jobs:
-  lint:
-    name: Lint Job
-    runs-on: ubuntu-latest
