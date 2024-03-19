@@ -6,6 +6,7 @@ on:
       - main
       - master
 
+
 jobs:
   lint_and_install:
     name: Run Linting Checks and Installation
