@@ -94,6 +94,7 @@ def show_passwords():
 
 
 # ---------------------------- UI SETUP ------------------------------- #
+# ---------------------------- UI SETUP ------------------------------- #
 check_first_flag = False
 window = tk.Tk()
 
@@ -103,36 +104,40 @@ window.config(padx=20, pady=20)
 canvas = tk.Canvas(width=220, height=189)
 lock_img = tk.PhotoImage(file="images/logo.png")
 canvas.create_image(100, 100, image=lock_img)
-canvas.grid(row=1, column=1)
+canvas.grid(row=2, column=1)
 
 # labels
-main_password_label = tk.Label(text="whatPassword  password: ", anchor="w", pady=5)
-main_password_label.grid(row=0, column=0, sticky="w", columnspan=2)
-wbsite_label = tk.Label(text="Website URL: ", anchor="w", pady=5)
-wbsite_label.grid(row=2, column=0, sticky="w")
+main_password_label = tk.Label(text="whatPassword password: ", anchor="w", pady=5)
+main_password_label.grid(row=1, column=0, sticky="w", columnspan=2)
+whatspassword_user_name_label = tk.Label(text="whatsPassword User name: ", anchor="w", pady=5)
+whatspassword_user_name_label.grid(row=0, column=0, sticky="w")
+website_label = tk.Label(text="Website URL: ", anchor="w", pady=5)
+website_label.grid(row=3, column=0, sticky="w")
 user_name_label = tk.Label(text="User name: ", anchor="w", pady=5)
-user_name_label.grid(row=3, column=0, sticky="w")
+user_name_label.grid(row=4, column=0, sticky="w")
 password_label = tk.Label(text="Password: ", anchor="w", pady=5)
-password_label.grid(row=4, column=0, sticky="w")
+password_label.grid(row=5, column=0, sticky="w")
 
-# entrys
-main_password_entry = tk.Entry(width=20)
-main_password_entry.grid(row=0, column=1)
-# main_password_entry.focus()
+# entries
+whatspassword_user_name_entry = tk.Entry(width=50)
+whatspassword_user_name_entry.grid(row=0, column=1, columnspan=2)
+main_password_entry = tk.Entry(width=50)
+main_password_entry.grid(row=1, column=1)
 website_entry = tk.Entry(width=50)
-website_entry.grid(row=2, column=1, columnspan=2)
+website_entry.grid(row=3, column=1, columnspan=2)
 user_name_entry = tk.Entry(width=50)
-user_name_entry.grid(row=3, column=1, columnspan=2)
+user_name_entry.grid(row=4, column=1, columnspan=2)
 password_entry = tk.Entry(width=25)
-password_entry.grid(row=4, column=1, sticky="w", pady=5)
+password_entry.grid(row=5, column=1, sticky="w", pady=5)
 
 # buttons
 generate_button = tk.Button(text="Generate password", width=19, command=genrate_secure_password)
-generate_button.grid(row=4, column=1, columnspan=2, sticky="e", pady=5)
+generate_button.grid(row=5, column=1, columnspan=2, sticky="e", pady=5)
 add_button = tk.Button(text="add", width=21, command=add_password)
-add_button.grid(row=5, column=1, sticky="w")
+add_button.grid(row=6, column=1, sticky="w")
 show_button = tk.Button(text="show", width=19, command=show_passwords)
-show_button.grid(row=5, column=1, columnspan=2, sticky="e")
+show_button.grid(row=6, column=1, columnspan=2, sticky="e")
+
 main_password_entry.focus()
 if not check_first_flag:
     check_first_time()
