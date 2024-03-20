@@ -138,8 +138,8 @@ add_button.grid(row=6, column=1, sticky="w")
 show_button = tk.Button(text="show", width=19, command=show_passwords)
 show_button.grid(row=6, column=1, columnspan=2, sticky="e")
 
-main_password_entry.focus()
+whatspassword_user_name_entry.focus_force()
 if not check_first_flag:
     check_first_time()
-    main_password_entry.focus_force()
+    whatspassword_user_name_entry.focus_force()
 window.mainloop()
