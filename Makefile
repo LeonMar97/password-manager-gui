@@ -2,7 +2,7 @@ install:poetry.lock pyproject.toml
 	poetry install
 run: 
 	@$(bash) echo "dont forget to run make run-server as well"
-	poetry run python main.py
+	poetry run python password_manager_gui/ui/main.py
 format:
 	poetry run ruff format password_manager_gui
 lint:
