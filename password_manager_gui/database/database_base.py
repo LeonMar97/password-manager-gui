@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from models.models import User
+from password_manager_gui.models.models import User
 
 class Database(ABC):
     def __init__(self):

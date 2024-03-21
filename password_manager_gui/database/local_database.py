@@ -1,6 +1,6 @@
 from fastapi import HTTPException,status
-from database_base import Database
-from models.models import User
+from password_manager_gui.database.database_base import Database
+from password_manager_gui.models.models import User
 from typing import List
 
 class LocalDatabase(Database):
