@@ -4,9 +4,8 @@ from password_manager_gui.models.models import User
 class Database(ABC):
     def __init__(self):
         self.db = None  # Initialize db variable to None initially
-
     @abstractmethod
-    async def connect_to_database(self):
+    def connect_to_database(self):
         """
         Connect to the database and initialize the db variable.
         """
