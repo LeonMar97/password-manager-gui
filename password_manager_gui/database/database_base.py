@@ -5,7 +5,7 @@ class Database(ABC):
     def __init__(self):
         self.db = None  # Initialize db variable to None initially
     @abstractmethod
-    def connect_to_database(self):
+    async def connect_to_database(self):
         """
         Connect to the database and initialize the db variable.
         """

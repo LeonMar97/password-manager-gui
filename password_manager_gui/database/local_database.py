@@ -6,11 +6,9 @@ from password_manager_gui.models.models import User
 class LocalDatabase(Database):
     async def register_user(self, usr: User):
         if await self.user_exists(usr):
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="user already registerd")
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="user already registerd")
         else:
-            print("im also appending it ")
             self.db.append(usr)
-            print(f'the db now is : {self.db}')
             return {"message": "User registered successfully"}, status.HTTP_201_CREATED
     
     async def user_exists(self, usr: User):
@@ -18,5 +16,5 @@ class LocalDatabase(Database):
         return any(cur_usr.user_name==usr.user_name for cur_usr in self.db)
     
     
-    def connect_to_database(self):
+    async def connect_to_database(self):
         self.db = [User(user_name="leon", password="123456")]
