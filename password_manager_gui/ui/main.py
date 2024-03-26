@@ -28,7 +28,10 @@ def add_user():
     if (main_password and main_user_name):
         usr={"user_name":main_user_name,"password":main_password}
         res= requests.post(f"{URL}/api/v1/user",json=usr)
-        pass
+        if res.status_code==200:
+            messagebox.showinfo("Success", "user added to db succesfully")
+        elif res.status_code==409:
+            messagebox.showerror("Error", "user already exist")
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add_password():
     """adds password to txt file in json encrypted format as bytes"""
