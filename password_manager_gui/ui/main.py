@@ -1,30 +1,45 @@
 import tkinter as tk
-import encryption
+import password_manager_gui.backend.encryption as encryption
 from tkinter import scrolledtext
 from tkinter import messagebox
 import json
 import pyperclip as pc
+import requests
+from password_generator import PasswordGenerator
 
+URL="http://localhost:8000"
 
+def password_generator():
+    """genrate secure password"""
+    password = PasswordGenerator().non_duplicate_password(20)
+    return password
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def genrate_secure_password():
     """genrate secure password, past in entry and copies it to clipboard"""
     password_entry.delete(0, tk.END)
-    pw = encryption.password_generator()
+    pw = password_generator()
     password_entry.insert(tk.END, pw)
     pc.copy(pw)
 
-
+# ---------------------------- ADD USER ------------------------------------ #
+def add_user():
+    main_password = main_password_entry.get()
+    main_user_name=whatspassword_user_name_entry.get()
+    if (main_password and main_user_name):
+        usr={"user_name":main_user_name,"password":main_password}
+        res= requests.post(f"{URL}/api/v1/user",json=usr)
+        pass
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add_password():
     """adds password to txt file in json encrypted format as bytes"""
     cur_website = website_entry.get()
     cur_user = user_name_entry.get()
     cur_password = password_entry.get()
-    cur_main_password = main_password_entry.get()
-    if cur_website and cur_user and cur_password and cur_main_password:
+    main_password = main_password_entry.get()
+    # main_user_name=whatspassword_user_name_entry.get()
+    if cur_website and cur_user and cur_password and main_password:
         password = {"user_name": cur_user, "password": cur_password}
-        if not encryption.encrypt_data(main_pass=cur_main_password, website=cur_website, new_password=password):
+        if not encryption.encrypt_data(main_pass=main_password, website=cur_website, new_password=password):
             messagebox.showerror("Error", "something went wrong with the encryption")
         else:
             messagebox.showinfo("Success", "password as added succesfully")
@@ -101,10 +116,10 @@ window = tk.Tk()
 window.title("Password Manager")
 
 window.config(padx=20, pady=20)
-canvas = tk.Canvas(width=220, height=189)
+canvas = tk.Canvas(width=300, height=189)
 lock_img = tk.PhotoImage(file="images/logo.png")
 canvas.create_image(100, 100, image=lock_img)
-canvas.grid(row=2, column=1)
+canvas.grid(row=7, column=1)
 
 # labels
 main_password_label = tk.Label(text="whatPassword password: ", anchor="w", pady=5)
@@ -133,10 +148,15 @@ password_entry.grid(row=5, column=1, sticky="w", pady=5)
 # buttons
 generate_button = tk.Button(text="Generate password", width=19, command=genrate_secure_password)
 generate_button.grid(row=5, column=1, columnspan=2, sticky="e", pady=5)
+
 add_button = tk.Button(text="add", width=21, command=add_password)
 add_button.grid(row=6, column=1, sticky="w")
+
 show_button = tk.Button(text="show", width=19, command=show_passwords)
 show_button.grid(row=6, column=1, columnspan=2, sticky="e")
+
+create_user_button = tk.Button(text="Create User", width=21, command=add_user)
+create_user_button.grid(row=2, column=1, sticky="w")
 
 whatspassword_user_name_entry.focus_force()
 if not check_first_flag:
