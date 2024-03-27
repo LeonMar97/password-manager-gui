@@ -5,14 +5,13 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 import base64
-from password_generator import PasswordGenerator
 
 # you can change the salt here for more security, but use the same one each time to retrieve the data
 SALT = b"some_random_salt"
 
 
-def generate_key(password):
-    """gerate kdf 32byts kkey matiriall for generatin encryption key later-on from users main password,
+def generate_kdf(password):
+    """gerate kdf 32byts key matiriall for generatin encryption key later-on from users main password,
     using sha256 algo
     Parameter:
     password= my pass paswords for gui
@@ -41,7 +40,7 @@ def get_key(main_pass):
     Fernets ecryption key
     """
 
-    encryption_key = generate_key(main_pass)
+    encryption_key = generate_kdf(main_pass)
     return Fernet(base64.urlsafe_b64encode(encryption_key))
 
 
@@ -102,9 +101,3 @@ def decrypt_data(key):
             return None
 
     return data
-
-
-def password_generator():
-    """genrate secure password"""
-    password = PasswordGenerator().non_duplicate_password(20)
-    return password

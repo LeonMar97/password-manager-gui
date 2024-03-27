@@ -13,6 +13,9 @@ random-password-generator = "^2.2.0"
 pyperclip = "^1.8.2"
 ruff = "^0.3.3"
 black = "^24.3.0"
+pydantic = "^2.6.4"
+fastapi = {version = "^0.110.0", extras = ["all"]}
+requests = "^2.31.0"
 
 [tool.ruff.lint]
 extend-select = ["E501"]
