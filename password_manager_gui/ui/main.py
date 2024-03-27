@@ -7,12 +7,15 @@ import pyperclip as pc
 import requests
 from password_generator import PasswordGenerator
 
-URL="http://localhost:8000"
+URL = "http://localhost:8000"
+
 
 def password_generator():
     """genrate secure password"""
     password = PasswordGenerator().non_duplicate_password(20)
     return password
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def genrate_secure_password():
     """genrate secure password, past in entry and copies it to clipboard"""
@@ -21,14 +24,26 @@ def genrate_secure_password():
     password_entry.insert(tk.END, pw)
     pc.copy(pw)
 
+
 # ---------------------------- ADD USER ------------------------------------ #
 def add_user():
     main_password = main_password_entry.get()
-    main_user_name=whatspassword_user_name_entry.get()
-    if (main_password and main_user_name):
-        usr={"user_name":main_user_name,"password":main_password}
-        res= requests.post(f"{URL}/api/v1/user",json=usr)
-        pass
+    main_user_name = whatspassword_user_name_entry.get()
+    if main_password and main_user_name:
+        usr = {"user_name": main_user_name, "password": main_password}
+        try:
+            res = requests.post(f"{URL}/api/v1/user", json=usr)
+            if res.status_code == 201:
+                messagebox.showinfo("Success", "User was added successfully")
+            elif res.status_code == 409:
+                messagebox.showinfo("Error", "User already registered")
+            else:
+                messagebox.showinfo("Error", f"An error occurred: {res.status_code}")
+        except Exception as e:
+            messagebox.showinfo("Error", "An unexpected error occurred")
+            raise e    
+
+
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add_password():
     """adds password to txt file in json encrypted format as bytes"""
