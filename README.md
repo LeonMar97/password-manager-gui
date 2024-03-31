@@ -1,7 +1,9 @@
 # Password Manager Application
 
 ## Overview
-This Python application is a simple password manager that allows users to securely store and manage their login credentials for various websites. The application features a **GUI** built with **tkinter** and utilizes encryption techniques to protect sensitive data. It communicates with a **FastAPI** server acting as the backend for the package, which includes built-in **OpenAPI documentation** accessible at `localhost:8000/documentation`.
+This Python application is a simple password manager that allows users to securely store and manage their login credentials for various websites. The application features a GUI built with tkinter and utilizes encryption techniques to protect sensitive data. It communicates with a FastAPI server acting as the backend for the package.
+
+Development is streamlined with a Makefile serving as a task runner, simplifying common tasks such as installation, linting, and running the server. The codebase is maintained with the Ruff linter/formatter, ensuring adherence to coding standards and identifying potential issues. Dependency management is handled seamlessly using Poetry, providing an efficient way to manage project dependencies and environments.
 
 ## Features
 - **Password Generation:** The application provides a built-in password generator that can generate secure passwords for your accounts.
@@ -16,6 +18,18 @@ This Python application is a simple password manager that allows users to secure
 - **Database Class:** Defines a foundation for database operations with abstract methods for connecting to the database, registering users, adding passwords, etc.
 - **GitHub Workflow (linter.yml):** Ensures linting checks are performed on pull requests targeting the main or master branches before they are merged.
 
+## package structure:
+   ├───backend
+   │   └───server, utilized fastapi routes for add user, password, or retrieve it.
+   |   └───encryption, module for encrypting and decrypting, users password
+   ├───database
+   │   └───base database class to replicate backend functioanlity for any db.
+   |   └───local data base example for the gui. ( currently works for one user).  
+   ├───models
+   │   └───pydentic modles, to verify before applying to database.
+   ├───ui
+       └───tkinter gui model, to display the backend functionality interactivly.
+   
 ## How to Use
 1. **Installation:**
    - Ensure you have **Python 3.x** installed on your system.
