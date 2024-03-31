@@ -19,7 +19,7 @@ This Python application is a simple password manager that allows users to secure
 ## How to Use
 1. **Installation:**
    - Ensure you have **Python 3.x** installed on your system.
-   - Run ```poetry install``` to install dependencies using Poetry.
+   - Run ```make install``` to install dependencies using Poetry.
 
 2. **Run the Application:**
    - Execute ```make run``` to start the GUI example.
