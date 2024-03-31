@@ -18,18 +18,19 @@ Development is streamlined with a Makefile serving as a task runner, simplifying
 - **Database Class:** Defines a foundation for database operations with abstract methods for connecting to the database, registering users, adding passwords, etc.
 - **GitHub Workflow (linter.yml):** Ensures linting checks are performed on pull requests targeting the main or master branches before they are merged.
 
-## package structure:
+## Package Structure:
+```bash
    ├───backend
-   │   └───server, utilized fastapi routes for add user, password, or retrieve it.
-   |   └───encryption, module for encrypting and decrypting, users password
+   │   ├───server: Utilizes FastAPI routes for adding users, passwords, or retrieving them.
+   │   └───encryption: Module for encrypting and decrypting user passwords.
    ├───database
-   │   └───base database class to replicate backend functioanlity for any db.
-   |   └───local data base example for the gui. ( currently works for one user).  
+   │   ├───database_base: Database class to replicate backend functionality for any database.
+   │   └───local_database: Local database example for the GUI (currently works for one user).
    ├───models
-   │   └───pydentic modles, to verify before applying to database.
-   ├───ui
-       └───tkinter gui model, to display the backend functionality interactivly.
-   
+   │   └───password_model, user_model: Pydantic models to verify data before applying to the database.
+   └───ui
+       └───main: Tkinter GUI model to display the backend functionality interactively.
+```
 ## How to Use
 1. **Installation:**
    - Ensure you have **Python 3.x** installed on your system.
