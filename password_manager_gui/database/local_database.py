@@ -67,14 +67,16 @@ class LocalDatabase(Database):
         usr=user for the passwords
         """
         # should be changed later on to get passwords for multiple users
-        try:
-            self.validate_user(usr)
-        except HTTPException as http_exc:
-            return http_exc
-        decrypted_data = encryption.decrypt_data(usr.password)
-        if decrypted_data:
-            return json.loads(decrypted_data.replace("'", '"'))
+
+        if await self.validate_user(usr):
+            decrypted_data = encryption.decrypt_data(usr.password)
+            if decrypted_data:
+                return json.loads(decrypted_data.replace("'", '"'))
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="something is wrong with the encryption"
+                )
         else:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="something is wrong with the encryption"
+                status_code=status.HTTP_401_UNAUTHORIZED, detail=f"password for user {usr.user_name} is incorect"
             )

@@ -1,8 +1,10 @@
 import tkinter as tk
-import password_manager_gui.backend.encryption as encryption
+
+# import password_manager_gui.backend.encryption as encryption
 from tkinter import scrolledtext
 from tkinter import messagebox
-import json
+
+# import json
 import pyperclip as pc
 import requests
 from password_generator import PasswordGenerator
@@ -122,20 +124,31 @@ def format_data_for_display(data):
 def show_passwords():
     """prints passwords to another window"""
     cur_main_password = main_password_entry.get()
-    if not cur_main_password:
-        messagebox.showerror("Information", "please enter whatPassword  password.")
+    cur_main_user = whatspassword_user_name_entry.get()
+    if not cur_main_password or not cur_main_user:
+        messagebox.showerror("Information", "either user_name or password not entered.")
         return
 
-    decrypted_data = encryption.decrypt_data(cur_main_password)
-    if decrypted_data is None:
-        messagebox.showerror("Error", "whatPassword  password is incorrect")
+    user_json = {"user_name": cur_main_user, "password": cur_main_password}
+    try:
+        decrypted_data = requests.get(f"{URL}/ap1/v1/decrypt-passwords", json=user_json)
+    except Exception:
+        messagebox.showerror("Error", "seems like the server is down")
         return
+
+    if decrypted_data.status_code == 401:
+        messagebox.showerror("Error", "whatPassword  password or user is incorrect ")
+        return
+    elif decrypted_data.status_code == 500:
+        messagebox.showerror("Error", "something went wrong with the decryption")
+        return
+
     else:
         passwrods_window = tk.Toplevel()
         passwrods_window.title("All passwords")
         text_widget = scrolledtext.ScrolledText(passwrods_window, wrap=tk.WORD)
-        passwords_as_json = json.loads(decrypted_data.replace("'", '"'))
-        formated_data = format_data_for_display(passwords_as_json)
+        # passwords_as_json = json.loads(decrypted_data.replace("'", '"'))
+        formated_data = format_data_for_display(decrypted_data.json())
         text_widget.insert(tk.END, formated_data)
         text_widget.pack(expand=True, fill="both")
 
