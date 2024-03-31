@@ -1,54 +1,47 @@
 # Password Manager Application
 
 ## Overview
-This Python application is a simple password manager that allows users to securely store and manage their login credentials for various websites. The application uses the tkinter library for the graphical user interface (GUI) and leverages encryption techniques to protect sensitive data.
+This Python application is a simple password manager that allows users to securely store and manage their login credentials for various websites. The application features a **GUI** built with **tkinter** and utilizes encryption techniques to protect sensitive data. It communicates with a **FastAPI** server acting as the backend for the package, which includes built-in **OpenAPI documentation** accessible at `localhost:8000/documentation`.
 
 ## Features
 - **Password Generation:** The application provides a built-in password generator that can generate secure passwords for your accounts.
-
-- **Data Encryption:** The passwords and website information are stored in an encrypted format, making it difficult for unauthorized users to access the data.
-
+- **Data Encryption:** The passwords and website information are stored in an encrypted format, ensuring protection against unauthorized access.
+- **FastAPI Backend:** Utilizes FastAPI framework to establish REST operations with built-in OpenAPI documentation for routes at `localhost:8000/documentation`.
 - **User-Friendly Interface:** The GUI makes it easy for users to add, view, and manage their stored passwords.
 
 ## Files
-- **main.py:** This is the main script for the password manager application. It contains the code for the GUI and password management functionality. It also uses the "encryption.py" script for encryption and password generation.
-
+- **main.py:** This is the main script for the password manager application. It contains the code for the GUI and password management functionality. It also utilizes the "encryption.py" script for encryption and password generation.
 - **encryption.py:** This script contains the encryption functions, including key generation, data encryption, and decryption. It also includes a password generator function for creating secure passwords.
-
-- **logo.png** was created using bing bot :) 
+- **logo.png:** The logo for the application - > created using bing ai :) .
+- **Database Class:** Defines a foundation for database operations with abstract methods for connecting to the database, registering users, adding passwords, etc.
+- **GitHub Workflow (linter.yml):** Ensures linting checks are performed on pull requests targeting the main or master branches before they are merged.
 
 ## How to Use
-1. Run the "main.py" script to open the application.
+1. **Installation:**
+   - Ensure you have **Python 3.x** installed on your system.
+   - Run ```make install``` to install dependencies using Poetry.
 
-2. To add a new password entry, provide the following information:
-   - Website URL
-   - User Name
-   - Password
+2. **Run the Application:**
+   - Execute ```make run``` to start the GUI example.
+   - To start the FastAPI backend server, run ```make run-server``` in a separate terminal.
 
-   Click the "Generate password" button to generate a secure password, or enter your own.
+3. **Adding Password Entry:**
+   - Provide the Website URL, User Name, and Password in the corresponding fields.
+   - Click the "Generate password" button to create a secure password or enter your own.
+   - Enter your **whatPassword** in the corresponding field.
+   - Click the "Add" button to save the new password entry.
 
-3. Enter your "whatPassword" in the corresponding field. This is the main password you will use to access your stored passwords.
+4. **Viewing Stored Passwords:**
+   - Click the "Show" button to view stored passwords.
+   - Enter your **whatPassword** when prompted.
 
-4. Click the "Add" button to save the new password entry. Make sure to enter all required information.
+5. **Security Note:**
+   - Remember your **whatPassword** as it's crucial for accessing stored passwords.
+   - If forgotten, stored passwords cannot be retrieved.
 
-5. To view your stored passwords, click the "Show" button. You'll be prompted to enter your "whatPassword."
-
-6. If it's your first time using the application, you'll receive a warning message to remind you to remember your "whatPassword" since it cannot be recovered.
-
-## Security
-The application uses strong encryption techniques to protect your data. It's important to remember your "whatPassword" because it is the key to accessing your stored passwords. If you forget it, you won't be able to retrieve your passwords.
-
-## Dependencies
-- Python 3.x
-- tkinter (for the GUI)
-- pandas
-- pyperclip
-- password_generator
-- cryptography
-
-## Disclaimer
-This password manager is designed for personal use and should not be considered a replacement for enterprise-level password management solutions. Always use strong, unique passwords for your online accounts and keep your "whatPassword" secure.
+## Linting and Formatting
+- Use ```make lint``` to check linting issues.
+- To attempt fixing linting issues, run ```make lint-fix```.
 
 ## Author
 This password manager application was created by Leon Markovich.
-
