@@ -1,8 +1,10 @@
 import tkinter as tk
-import password_manager_gui.backend.encryption as encryption
+
+# import password_manager_gui.backend.encryption as encryption
 from tkinter import scrolledtext
 from tkinter import messagebox
-import json
+
+# import json
 import pyperclip as pc
 import requests
 from password_generator import PasswordGenerator
@@ -41,23 +43,40 @@ def add_user():
                 messagebox.showinfo("Error", f"An error occurred: {res.status_code}")
         except Exception as e:
             messagebox.showinfo("Error", "An unexpected error occurred")
-            raise e    
+            raise e
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add_password():
     """adds password to txt file in json encrypted format as bytes"""
     cur_website = website_entry.get()
-    cur_user = user_name_entry.get()
-    cur_password = password_entry.get()
+    website_user = website_user_name_entry.get()
+    website_password = password_entry.get()
     main_password = main_password_entry.get()
-    # main_user_name=whatspassword_user_name_entry.get()
-    if cur_website and cur_user and cur_password and main_password:
-        password = {"user_name": cur_user, "password": cur_password}
-        if not encryption.encrypt_data(main_pass=main_password, website=cur_website, new_password=password):
-            messagebox.showerror("Error", "something went wrong with the encryption")
-        else:
-            messagebox.showinfo("Success", "password as added succesfully")
+    main_user_name = whatspassword_user_name_entry.get()
+    if cur_website and website_user and website_password and main_password:
+        # password = {"user_name": website_user, "password": website_password}
+        new_password = {
+            "usr": {"user_name": main_user_name, "password": main_password},
+            "pas": {
+                "website_user_name": website_user,
+                "website_password": website_password,
+                "website_url": cur_website,
+            },
+        }
+
+        try:
+            res = requests.post(f"{URL}/api/v1/add-password", json=new_password)
+            if res.status_code == 500:
+                messagebox.showerror("Error", "something went wrong with the encryption")
+            elif res.status_code == 201:
+                messagebox.showinfo("Success", "password as added succesfully")
+            elif res.status_code == 401:
+                messagebox.showerror("Error", "please fix username or password")
+        except Exception as e:
+            messagebox.showinfo("Error", "An unexpected error occurred")
+            raise e
+
     else:
         messagebox.showerror("Information", "you didnt enter all info")
 
@@ -105,20 +124,31 @@ def format_data_for_display(data):
 def show_passwords():
     """prints passwords to another window"""
     cur_main_password = main_password_entry.get()
-    if not cur_main_password:
-        messagebox.showerror("Information", "please enter whatPassword  password.")
+    cur_main_user = whatspassword_user_name_entry.get()
+    if not cur_main_password or not cur_main_user:
+        messagebox.showerror("Information", "either user_name or password not entered.")
         return
 
-    decrypted_data = encryption.decrypt_data(cur_main_password)
-    if decrypted_data is None:
-        messagebox.showerror("Error", "whatPassword  password is incorrect")
+    user_json = {"user_name": cur_main_user, "password": cur_main_password}
+    try:
+        decrypted_data = requests.get(f"{URL}/ap1/v1/decrypt-passwords", json=user_json)
+    except Exception:
+        messagebox.showerror("Error", "seems like the server is down")
         return
+
+    if decrypted_data.status_code == 401:
+        messagebox.showerror("Error", "whatPassword  password or user is incorrect ")
+        return
+    elif decrypted_data.status_code == 500:
+        messagebox.showerror("Error", "something went wrong with the decryption")
+        return
+
     else:
         passwrods_window = tk.Toplevel()
         passwrods_window.title("All passwords")
         text_widget = scrolledtext.ScrolledText(passwrods_window, wrap=tk.WORD)
-        passwords_as_json = json.loads(decrypted_data.replace("'", '"'))
-        formated_data = format_data_for_display(passwords_as_json)
+        # passwords_as_json = json.loads(decrypted_data.replace("'", '"'))
+        formated_data = format_data_for_display(decrypted_data.json())
         text_widget.insert(tk.END, formated_data)
         text_widget.pack(expand=True, fill="both")
 
@@ -155,8 +185,8 @@ main_password_entry = tk.Entry(width=50)
 main_password_entry.grid(row=1, column=1)
 website_entry = tk.Entry(width=50)
 website_entry.grid(row=3, column=1, columnspan=2)
-user_name_entry = tk.Entry(width=50)
-user_name_entry.grid(row=4, column=1, columnspan=2)
+website_user_name_entry = tk.Entry(width=50)
+website_user_name_entry.grid(row=4, column=1, columnspan=2)
 password_entry = tk.Entry(width=25)
 password_entry.grid(row=5, column=1, sticky="w", pady=5)
 
