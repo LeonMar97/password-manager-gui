@@ -29,3 +29,6 @@ jobs:
 
       - name: Makefile lint
         run: make lint
+      
+      - name: Unittest
+        run: make test

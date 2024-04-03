@@ -19,6 +19,8 @@ lint-tests-fix:
 	poetry run ruff check --fix tests/
 lint-tests-unsafe:
 	poetry run check --fix --unsafe-fixes tests/
+test:
+	poetry run pytest
 
 
 
