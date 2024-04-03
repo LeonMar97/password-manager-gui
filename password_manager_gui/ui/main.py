@@ -34,7 +34,7 @@ def add_user():
     if main_password and main_user_name:
         usr = {"user_name": main_user_name, "password": main_password}
         try:
-            res = requests.post(f"{URL}/api/v1/user", json=usr)
+            res = requests.post(f"{URL}/api/v1/add-user", json=usr)
             if res.status_code == 201:
                 messagebox.showinfo("Success", "User was added successfully")
             elif res.status_code == 409:
