@@ -26,14 +26,19 @@ db = LocalDatabase()
 
 @app.post("/api/v1/add-user")
 async def register_user(usr: User):
+    """creates new user and adds to db"""
     return await db.register_user(usr)
 
 
 @app.post("/api/v1/add-password")
 async def add_passwords(usr: User, pas: Password):
+    """creates a password of a website for user"""
     return await db.add_password(usr, pas)
 
 
-@app.get("/ap1/v1/decrypt-passwords")
+# its post because im passing main password in the body, and i rather not pass it by parms
+# should later on changed to work via session
+@app.post("/api/v1/decrypt-passwords")
 async def get_passwords(usr: User):
+    """returns all decrypted password of user"""
     return await db.get_passwords(usr)

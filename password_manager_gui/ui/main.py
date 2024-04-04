@@ -131,7 +131,7 @@ def show_passwords():
 
     user_json = {"user_name": cur_main_user, "password": cur_main_password}
     try:
-        decrypted_data = requests.get(f"{URL}/ap1/v1/decrypt-passwords", json=user_json)
+        decrypted_data = requests.post(f"{URL}/api/v1/decrypt-passwords", json=user_json)
     except Exception:
         messagebox.showerror("Error", "seems like the server is down")
         return
