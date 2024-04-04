@@ -33,4 +33,4 @@ jobs:
         run: make lint
       
       - name: Unittest
-        run: mkdir passwords|touch passwords/encrypted-passwords.txt|make test
+        run: mkdir passwords && touch passwords/encrypted-passwords.txt && make test
