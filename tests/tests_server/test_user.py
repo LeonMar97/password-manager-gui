@@ -1,22 +1,14 @@
-from password_manager_gui.backend.server import app
-from fastapi.testclient import TestClient
+def test_ping_endpoint_returns_pong(client):
+    response = client.get("/ping")
+    assert response.status_code == 200
+    assert response.text == "pong"
 
 
-# using with for testclient for lifespan generator to create the local db
-def test_ping():
-    with TestClient(app) as client:
-        response = client.get("/ping")
-        assert response.status_code == 200
-        assert response.text == "pong"
+def test_add_user_creates_new_user(client):
+    response = client.post("/api/v1/add-user", json={"user_name": "test_user", "password": "1234"})
+    assert response.status_code == 201
 
 
-def test_add():
-    with TestClient(app) as client:
-        response = client.post("/api/v1/add-user", json={"user_name": "leonm", "password": "1234"})
-        assert response.status_code == 201
-
-
-def test_same_user_name():
-    with TestClient(app) as client:
-        response = client.post("/api/v1/add-user", json={"user_name": "leon", "password": "1234"})
-        assert response.status_code == 409
+def test_add_user_fails_on_duplicate_username(client):
+    response = client.post("/api/v1/add-user", json={"user_name": "leonm", "password": "1234"})
+    assert response.status_code == 409

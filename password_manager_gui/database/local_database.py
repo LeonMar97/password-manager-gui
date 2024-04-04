@@ -29,7 +29,7 @@ class LocalDatabase(Database):
         return usr.user_name in self.db
 
     async def connect_to_database(self):
-        self.db = {"leon": "123456"}
+        self.db = {"leonm": encryption.generate_kdf("1234")}
 
     async def validate_user(self, usr: User) -> bool:
         """checks if the users password matches whats in db (in memory for now)
@@ -49,12 +49,14 @@ class LocalDatabase(Database):
         """
         if await self.validate_user(usr):
             password_json = {"user_name": pas.website_user_name, "password": pas.website_password}
-            if encryption.encrypt_data(main_pass=usr.password, website=pas.website_url, new_password=password_json):
+            if encryption.encrypt_data(
+                main_usr=usr.user_name, main_pass=usr.password, website=pas.website_url, new_password=password_json
+            ):
                 content = {"message": "password added successfully"}
                 return JSONResponse(content=content, status_code=status.HTTP_201_CREATED)
             else:
                 raise HTTPException(
-                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="something is wrond with the encryption"
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="something is wrong with the encryption"
                 )
         else:
             raise HTTPException(
@@ -69,7 +71,7 @@ class LocalDatabase(Database):
         # should be changed later on to get passwords for multiple users
 
         if await self.validate_user(usr):
-            decrypted_data = encryption.decrypt_data(usr.password)
+            decrypted_data = encryption.decrypt_data(usr.user_name + usr.password)
             if decrypted_data:
                 return json.loads(decrypted_data.replace("'", '"'))
             else:
