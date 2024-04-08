@@ -5,7 +5,9 @@ on:
     branches:
       - main
       - master
-
+  push:
+    branches:
+      testing
 
 jobs:
   lint_and_install:
@@ -29,3 +31,6 @@ jobs:
 
       - name: Makefile lint
         run: make lint
+      
+      - name: Unittest
+        run: mkdir passwords && touch passwords/encrypted-passwords.txt && make test

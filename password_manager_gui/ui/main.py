@@ -34,7 +34,7 @@ def add_user():
     if main_password and main_user_name:
         usr = {"user_name": main_user_name, "password": main_password}
         try:
-            res = requests.post(f"{URL}/api/v1/user", json=usr)
+            res = requests.post(f"{URL}/api/v1/add-user", json=usr)
             if res.status_code == 201:
                 messagebox.showinfo("Success", "User was added successfully")
             elif res.status_code == 409:
@@ -131,7 +131,7 @@ def show_passwords():
 
     user_json = {"user_name": cur_main_user, "password": cur_main_password}
     try:
-        decrypted_data = requests.get(f"{URL}/ap1/v1/decrypt-passwords", json=user_json)
+        decrypted_data = requests.post(f"{URL}/api/v1/decrypt-passwords", json=user_json)
     except Exception:
         messagebox.showerror("Error", "seems like the server is down")
         return

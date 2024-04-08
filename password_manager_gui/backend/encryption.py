@@ -63,10 +63,10 @@ def set_data(enrypted_data):
         file.write(enrypted_data)
 
 
-def encrypt_data(main_pass, website, new_password):
+def encrypt_data(main_usr, main_pass, website, new_password):
     """encrypt website and new password as json encrypted bytes"""
-    key = get_key(main_pass)
-    decrypted_d = decrypt_data(key=main_pass)
+    key = get_key(main_usr + main_pass)
+    decrypted_d = decrypt_data(key=main_usr + main_pass)
     if not decrypted_d:
         return False
     data = json.loads((decrypted_d.replace("'", '"')))
